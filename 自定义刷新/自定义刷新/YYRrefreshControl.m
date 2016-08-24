@@ -26,6 +26,9 @@ typedef NS_ENUM(NSInteger,YYRrefreshControlState) {
 
 @property (nonatomic, assign) YYRrefreshControlState refreshState;
 
+// 保存之前的状态作为判断
+@property (nonatomic, assign) YYRrefreshControlState oldState;
+
 @end
 
 @implementation YYRrefreshControl
@@ -43,11 +46,14 @@ typedef NS_ENUM(NSInteger,YYRrefreshControlState) {
     switch (refreshState) {
         case Normal:
         {
-            [UIView animateWithDuration:0.5 animations:^{
-                self.scrollView.contentInset = UIEdgeInsetsMake(inset.top - 64, inset.left, inset.bottom, inset.right);
-            } completion:^(BOOL finished) {
-                
-            }];
+            if (self.oldState == Rrefreshing) {
+                [UIView animateWithDuration:0.5 animations:^{
+                    self.scrollView.contentInset = UIEdgeInsetsMake(inset.top - 64, inset.left, inset.bottom, inset.right);
+                } completion:^(BOOL finished) {
+                    
+                }];
+            }
+            
         }
             
             break;
@@ -73,6 +79,7 @@ typedef NS_ENUM(NSInteger,YYRrefreshControlState) {
         default:
             break;
     }
+    self.oldState = refreshState;
     
 }
 
